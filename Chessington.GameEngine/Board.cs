@@ -20,19 +20,30 @@ namespace Chessington.GameEngine
             CurrentPlayer = currentPlayer;
             CapturedPieces = new List<Piece>();
         }
-        public static bool Legal(Square square)
+        public int Legal(Square square)
         {
             if ((square.Col >= 0 && square.Col <= 7) && (square.Row >= 0 && square.Row <= 7))
             {
-                return true;
+                Piece existing = GetPiece(square);
+                if (existing != null)
+                {
+                    if (existing.Player != CurrentPlayer)
+                    {
+                        return 2;
+                    } else
+                    {
+                        return 3;
+                    }
+                }
+                return 1;
             }
-            return false;
+            return 0;
         }
         public void AddPiece(Square square, Piece pawn)
         {
             board[square.Row, square.Col] = pawn;
         }
-    
+
         public Piece GetPiece(Square square)
         {
             return board[square.Row, square.Col];

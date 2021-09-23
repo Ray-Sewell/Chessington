@@ -11,22 +11,75 @@ namespace Chessington.GameEngine.Pieces
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             List<Square> moves = new List<Square>();
-            Square currentPosition = board.FindPiece(this);
-
+            Square curPos = board.FindPiece(this);
+            Square reqPos;
+            bool blocked = false;
             if (Player == Player.White)
             {
-                moves.Add(Square.At(currentPosition.Row - 1, currentPosition.Col));
-                if (currentPosition.Row == 6)
+                reqPos = Square.At(curPos.Row - 1, curPos.Col);
+                switch (board.Legal(reqPos))
                 {
-                    moves.Add(Square.At(currentPosition.Row - 2, currentPosition.Col));
+                    case 1:
+                        moves.Add(reqPos);
+                        break;
+                    case 2:
+                        moves.Add(reqPos);
+                        blocked = true;
+                        break;
+                    case 3:
+                        blocked = true;
+                        break;
+                    default:
+                        break;
+                }
+                if (curPos.Row == 6 && !blocked)
+                {
+                    reqPos = Square.At(curPos.Row - 2, curPos.Col);
+                    switch (board.Legal(reqPos))
+                    {
+                        case 1:
+                            moves.Add(reqPos);
+                            break;
+                        case 2:
+                            moves.Add(reqPos);
+                            break;
+                        default:
+                            break;
+                    }
                 } 
             }
             if (Player == Player.Black)
             {
-                moves.Add(Square.At(currentPosition.Row + 1, currentPosition.Col));
-                if (currentPosition.Row == 1)
+                reqPos = Square.At(curPos.Row + 1, curPos.Col);
+                switch (board.Legal(reqPos))
                 {
-                    moves.Add(Square.At(currentPosition.Row + 2, currentPosition.Col));
+                    case 1:
+                        moves.Add(reqPos);
+                        break;
+                    case 2:
+                        moves.Add(reqPos);
+                        blocked = true;
+                        break;
+                    case 3:
+                        blocked = true;
+                        break;
+                    default:
+                        break;
+                }
+                if (curPos.Row == 1 && !blocked)
+                {
+                    reqPos = Square.At(curPos.Row + 2, curPos.Col);
+                    switch (board.Legal(reqPos))
+                    {
+                        case 1:
+                            moves.Add(reqPos);
+                            break;
+                        case 2:
+                            moves.Add(reqPos);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 

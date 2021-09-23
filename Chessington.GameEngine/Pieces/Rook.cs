@@ -12,11 +12,37 @@ namespace Chessington.GameEngine.Pieces
         {
             List<Square> moves = new List<Square>();
             Square curPos = board.FindPiece(this);
-
-            for (int i = 0; i <= 7; i++)
+            Square reqPos;
+            int[][] directions =
             {
-                moves.Add(Square.At(curPos.Row, i));
-                moves.Add(Square.At(i, curPos.Col));
+                new int[] {0, 1},
+                new int[] {1, 0},
+                new int[] {-1, 0},
+                new int[] {0, -1}
+            };
+            foreach (int[] direction_raw in directions)
+            {
+                bool blocked = false;
+                int[] direction = new int[] {direction_raw[0], direction_raw[1]};
+                while (!blocked)
+                {
+                    reqPos = Square.At(curPos.Row + direction[0], curPos.Col + direction[1]);
+                    switch (board.Legal(reqPos))
+                    {
+                        case 1:
+                            moves.Add(reqPos);
+                            break;
+                        case 2:
+                            moves.Add(reqPos);
+                            blocked = true;
+                            break;
+                        default:
+                            blocked = true;
+                            break;
+                    }
+                    direction[0] += direction_raw[0];
+                    direction[1] += direction_raw[1];
+                }
             }
 
             return moves;

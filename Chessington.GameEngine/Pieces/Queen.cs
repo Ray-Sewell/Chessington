@@ -10,25 +10,45 @@ namespace Chessington.GameEngine.Pieces
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            List<Square> moves_raw = new List<Square>();
             List<Square> moves = new List<Square>();
             Square curPos = board.FindPiece(this);
-            for (int i = 0; i <= 7; i++)
+            Square reqPos;
+            int[][] directions =
             {
-                moves_raw.Add(Square.At(curPos.Row + i, curPos.Col - i));
-                moves_raw.Add(Square.At(curPos.Row + i, curPos.Col + i));
-                moves_raw.Add(Square.At(curPos.Row - i, curPos.Col - i));
-                moves_raw.Add(Square.At(curPos.Row - i, curPos.Col + i));
-                moves_raw.Add(Square.At(curPos.Row, i));
-                moves_raw.Add(Square.At(i, curPos.Col));
-            }
-            foreach (Square move in moves_raw)
+                new int[] {0, 1},
+                new int[] {1, 0},
+                new int[] {-1, 0},
+                new int[] {0, -1},
+                new int[] {1, 1},
+                new int[] {1, -1},
+                new int[] {-1, 1},
+                new int[] {-1, -1}
+            };
+            foreach (int[] direction_raw in directions)
             {
-                if (Board.Legal(move) && curPos != move)
+                bool blocked = false;
+                int[] direction = new int[] { direction_raw[0], direction_raw[1] };
+                while (!blocked)
                 {
-                    moves.Add(move);
+                    reqPos = Square.At(curPos.Row + direction[0], curPos.Col + direction[1]);
+                    switch (board.Legal(reqPos))
+                    {
+                        case 1:
+                            moves.Add(reqPos);
+                            break;
+                        case 2:
+                            moves.Add(reqPos);
+                            blocked = true;
+                            break;
+                        default:
+                            blocked = true;
+                            break;
+                    }
+                    direction[0] += direction_raw[0];
+                    direction[1] += direction_raw[1];
                 }
             }
+
             return moves;
         }
     }
