@@ -20,7 +20,6 @@ namespace Chessington.GameEngine.Pieces
             var currentSquare = board.FindPiece(this);
             board.MovePiece(currentSquare, newSquare);
         }
-
         public List<Square> GenerateLegalMoves(Board board, int[][] directions)
         {
             List<Square> moves = new List<Square>();
@@ -33,19 +32,29 @@ namespace Chessington.GameEngine.Pieces
                 while (!blocked)
                 {
                     reqPos = Square.At(curPos.Row + direction[0], curPos.Col + direction[1]);
-                    switch (board.Legal(reqPos))
+                    
+                    if (board.WithinRange(reqPos))
                     {
-                        case 1:
+                        if(board.ExistingPiece(reqPos))
+                        {
+                            if(board.CheckFriendly(this, reqPos))
+                            {
+                                blocked = true;
+                                
+                            } else
+                            {
+                                moves.Add(reqPos);
+                                blocked = true;
+                            }
+                        } else
+                        {
                             moves.Add(reqPos);
-                            break;
-                        case 2:
-                            moves.Add(reqPos);
-                            blocked = true;
-                            break;
-                        default:
-                            blocked = true;
-                            break;
+                        }
+                    } else
+                    {
+                        blocked = true;
                     }
+                    
                     direction[0] += direction_raw[0];
                     direction[1] += direction_raw[1];
                 }

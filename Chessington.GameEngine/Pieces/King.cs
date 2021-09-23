@@ -23,20 +23,23 @@ namespace Chessington.GameEngine.Pieces
             List<Square> moves = new List<Square>();
             Square curPos = board.FindPiece(this);
             Square reqPos;
-            
+
             foreach (int[] direction_raw in directions)
             {
                 reqPos = Square.At(curPos.Row + direction_raw[0], curPos.Col + direction_raw[1]);
-                switch (board.Legal(reqPos))
+                if (board.WithinRange(reqPos))
                 {
-                    case 1:
+                    if (board.ExistingPiece(reqPos))
+                    {
+                        if (!board.CheckFriendly(this, reqPos))
+                        {
+                            moves.Add(reqPos);
+                        }
+                    }
+                    else
+                    {
                         moves.Add(reqPos);
-                        break;
-                    case 2:
-                        moves.Add(reqPos);
-                        break;
-                    default:
-                        break;
+                    }
                 }
             }
             return moves;

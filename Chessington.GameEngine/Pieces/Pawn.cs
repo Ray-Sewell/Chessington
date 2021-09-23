@@ -13,112 +13,66 @@ namespace Chessington.GameEngine.Pieces
             List<Square> moves = new List<Square>();
             Square curPos = board.FindPiece(this);
             Square reqPos;
-            bool blocked = false;
+
             if (Player == Player.White)
             {
                 reqPos = Square.At(curPos.Row - 1, curPos.Col);
-                switch (board.Legal(reqPos))
+                if (board.WithinRange(reqPos))
                 {
-                    case 1:
-                        moves.Add(reqPos);
-                        break;
-                    case 2:
-                        moves.Add(reqPos);
-                        blocked = true;
-                        break;
-                    case 3:
-                        blocked = true;
-                        break;
-                    default:
-                        break;
-                }
-                if (curPos.Row == 6 && !blocked)
-                {
-                    reqPos = Square.At(curPos.Row - 2, curPos.Col);
-                    switch (board.Legal(reqPos))
+                    if (!board.ExistingPiece(reqPos))
                     {
-                        case 1:
-                            moves.Add(reqPos);
-                            break;
-                        case 2:
-                            moves.Add(reqPos);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                reqPos = Square.At(curPos.Row -1, curPos.Col -1);
-                switch (board.Legal(reqPos))
-                {
-                    case 2:
                         moves.Add(reqPos);
-                        break;
-                    default:
-                        break;
+                        if (curPos.Row == 6)
+                        {
+                            reqPos = Square.At(curPos.Row - 2, curPos.Col);
+                            if (!board.ExistingPiece(reqPos))
+                            {
+                                moves.Add(reqPos);
+                            }
+                        }
+                    }
                 }
                 reqPos = Square.At(curPos.Row - 1, curPos.Col + 1);
-                switch (board.Legal(reqPos))
+                if (board.WithinRange(reqPos) && board.ExistingPiece(reqPos) && !board.CheckFriendly(this, reqPos))
                 {
-                    case 2:
-                        moves.Add(reqPos);
-                        break;
-                    default:
-                        break;
+                    moves.Add(reqPos);
                 }
-            }
-            if (Player == Player.Black)
+                reqPos = Square.At(curPos.Row - 1, curPos.Col - 1);
+                if (board.WithinRange(reqPos) && board.ExistingPiece(reqPos) && !board.CheckFriendly(this, reqPos))
+                {
+                    moves.Add(reqPos);
+                }
+            } 
+            else
             {
                 reqPos = Square.At(curPos.Row + 1, curPos.Col);
-                switch (board.Legal(reqPos))
+                if (board.WithinRange(reqPos))
                 {
-                    case 1:
-                        moves.Add(reqPos);
-                        break;
-                    case 2:
-                        moves.Add(reqPos);
-                        blocked = true;
-                        break;
-                    case 3:
-                        blocked = true;
-                        break;
-                    default:
-                        break;
-                }
-                if (curPos.Row == 1 && !blocked)
-                {
-                    reqPos = Square.At(curPos.Row + 2, curPos.Col);
-                    switch (board.Legal(reqPos))
+                    if (!board.ExistingPiece(reqPos))
                     {
-                        case 1:
-                            moves.Add(reqPos);
-                            break;
-                        case 2:
-                            moves.Add(reqPos);
-                            break;
-                        default:
-                            break;
+                        moves.Add(reqPos);
+                        if (curPos.Row == 1)
+                        {
+                            reqPos = Square.At(curPos.Row + 2, curPos.Col);
+                            if (!board.ExistingPiece(reqPos))
+                            {
+                                moves.Add(reqPos);
+                            }
+                        }
                     }
                 }
-                reqPos = Square.At(curPos.Row + 1, curPos.Col - 1);
-                switch (board.Legal(reqPos))
-                {
-                    case 2:
-                        moves.Add(reqPos);
-                        break;
-                    default:
-                        break;
-                }
                 reqPos = Square.At(curPos.Row + 1, curPos.Col + 1);
-                switch (board.Legal(reqPos))
+                if (board.WithinRange(reqPos) && board.ExistingPiece(reqPos) && !board.CheckFriendly(this, reqPos))
                 {
-                    case 2:
-                        moves.Add(reqPos);
-                        break;
-                    default:
-                        break;
+                    moves.Add(reqPos);
+                }
+                reqPos = Square.At(curPos.Row + 1, curPos.Col - 1);
+                if (board.WithinRange(reqPos) && board.ExistingPiece(reqPos) && !board.CheckFriendly(this, reqPos))
+                {
+                    moves.Add(reqPos);
                 }
             }
-
+            
             return moves;
         }
     }
