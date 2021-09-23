@@ -11,9 +11,7 @@ namespace Chessington.GameEngine.Pieces
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             List<Square> moves = new List<Square>();
-            // find current location
             Square currentPosition = board.FindPiece(this);
-            var availableSquares = new List<Square>();
 
             if (Player == Player.White)
             {
@@ -32,11 +30,7 @@ namespace Chessington.GameEngine.Pieces
                 }
             }
 
-            foreach (Square move in moves)
-            {
-                availableSquares.Add(move);
-            }
-            return availableSquares;
+            return moves;
         }
     }
 }
