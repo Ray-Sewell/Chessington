@@ -46,7 +46,25 @@ namespace Chessington.GameEngine.Pieces
                         default:
                             break;
                     }
-                } 
+                }
+                reqPos = Square.At(curPos.Row -1, curPos.Col -1);
+                switch (board.Legal(reqPos))
+                {
+                    case 2:
+                        moves.Add(reqPos);
+                        break;
+                    default:
+                        break;
+                }
+                reqPos = Square.At(curPos.Row - 1, curPos.Col + 1);
+                switch (board.Legal(reqPos))
+                {
+                    case 2:
+                        moves.Add(reqPos);
+                        break;
+                    default:
+                        break;
+                }
             }
             if (Player == Player.Black)
             {
@@ -80,6 +98,24 @@ namespace Chessington.GameEngine.Pieces
                         default:
                             break;
                     }
+                }
+                reqPos = Square.At(curPos.Row + 1, curPos.Col - 1);
+                switch (board.Legal(reqPos))
+                {
+                    case 2:
+                        moves.Add(reqPos);
+                        break;
+                    default:
+                        break;
+                }
+                reqPos = Square.At(curPos.Row + 1, curPos.Col + 1);
+                switch (board.Legal(reqPos))
+                {
+                    case 2:
+                        moves.Add(reqPos);
+                        break;
+                    default:
+                        break;
                 }
             }
 
